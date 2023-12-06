@@ -32,6 +32,7 @@ class ArvoreBinariaBusca:
         self.raiz = None
     
     def Inclusao(self, chave):
+        confere = False
         if self.raiz == None:
             novo = no()
             novo.valor = chave 
@@ -42,7 +43,8 @@ class ArvoreBinariaBusca:
             pont = self.raiz 
             pont, f,pai = Busca(pont,chave)
             if f==1:
-                print("Elemento existe")
+                print("Elemento Já foi incluído. Coloque outro, por gentileza!")
+                confere = True
             else:
                 novo = no()
                 novo.valor = chave 
@@ -52,29 +54,52 @@ class ArvoreBinariaBusca:
                     pont.esq = novo 
                 else:
                     pont.dir = novo 
-        return self.raiz 
-    def Busca(pont, chave, pai=None):
-        if pont.valor == chave:
-            f = 1
-        else:
-            if chave<pont.valor:
-                if pont.esq == None:
-                    f = 2
+        return self.raiz,confere
+    def Exclusao(self, chave):
+        confere = True
+        pont, f, pai = Busca(self.raiz,chave)
+        if f==1:
+            if pont.esq == None:
+                if pont == self.raiz:
+                    self.raiz = self.raiz.dir
                 else:
-                    pai = pont
-                    pont = pont.esq
-                    pont,f, pai = Busca(pont, chave,pai)
+                    if pont == pai.esq:
+                        pai.esq = pont.dir
+                    else:
+                        pai.dir = pont.dir
             else:
                 if pont.dir == None:
-                    f = 3
+                    if pont == self.raiz:
+                        self.raiz = self.raiz.esq
+                    else:
+                        if pont == pai.esq:
+                            pai.esq = pont.esq
+                        else:
+                            pai.dir = pont.esq
                 else:
-                    pai = pont
-                    pont = pont.dir
-                    pont,f, pai = Busca(pont,chave,pai)
-        return pont, f, pai
-    
-    def Pre_Ordem(arvore):
-        pont = arvore.raiz
+                    pont2 = pont.dir 
+                    pai2 = pont
+                    while pont2.esq!=None:
+                        pai2 = pont2
+                        pont2 = pont2.esq
+                    if pai2 != pont:
+                        pai2.esq = pont2.dir
+                        pont2.dir = pont.dir
+                    pont2.esq = pont.esq
+                    if pont == self.raiz:
+                        self.raiz = pont2
+                    else:
+                        if pai.esq == pont:
+                            pai.esq = pont2
+                        else:
+                            pai.dir = pont2
+        else:
+            confere = False
+            print(" Não é possível excluir um elemento que não existe na árvore")
+        del pont 
+        return confere
+    def Pre_Ordem(self):
+        pont = self.raiz
         if pont.valor == 0:
             print("Árvore vazia")
         else:
@@ -87,7 +112,6 @@ class ArvoreBinariaBusca:
                     pilha.empilhar(pont.dir)
                 if pont.esq != None:
                     pilha.empilhar(pont.esq)
-
     def imprimir_arvore(self, no, nivel=0, lado=None):
         if no != None:
             self.imprimir_arvore(no.esq, nivel + 1, 'E')

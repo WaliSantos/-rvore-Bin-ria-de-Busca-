@@ -1,66 +1,42 @@
-from inclusao import Inclusao
-from pre_ordem import Pre_Ordem
-from busca import Busca
 from estrutura_da_árvore.estrutura import ArvoreBinariaBusca
 
-
-def Exclusao(raiz, chave): 
-    pont, f, pai = Busca(raiz,chave)
-    if f==1:
-        if pont.esq == None:
-            if pont == raiz:
-                raiz = raiz.dir
-            else:
-                if pont == pai.esq:
-                    pai.esq = pont.dir
-                else:
-                    pai.dir = pont.dir
-        else:
-            if pont.dir == None:
-                if pont == raiz:
-                    raiz = raiz.esq
-                else:
-                    if pont == pai.esq:
-                        pai.esq = pont.esq
-                    else:
-                        pai.dir = pont.esq
-            else:
-                pont2 = pont.dir 
-                pai2 = pont
-                while pont2.esq!=None:
-                    pai = pont2
-                    pont2 = pont2.esq
-                if pai2!=pont:
-                    pai2.esq = pont2.dir
-                    pont2.dir = pont.dir
-                pont2.esq = pont.esq
-                if pont == raiz:
-                    raiz = pont2
-                else:
-                    if pai.esq == pont:
-                        pai.esq = pont2
-                    else:
-                        pai.dir = pont2
-    del pont
-
-
-# Criando uma instância da árvore binária de busca
 arvore = ArvoreBinariaBusca()
+opcao = 0
 
-arvore.Inclusao(45)
-arvore.Inclusao(30)
-arvore.Inclusao(15)
-arvore.Inclusao(70)
-arvore.Inclusao(60)
-arvore.Inclusao(20)
-arvore.Inclusao(40)
-arvore.Inclusao(65)
-arvore.Inclusao(100)
-arvore.Inclusao(90)
-arvore.Inclusao(35)
+print("Ual! Muito bom ter você por aqui! Vamos aprender sobre árvores binárias de busca?!")
+while opcao != "5":
+    
+    print("\nMenu:")
+    print("   Selecione uma das opções abaixo:")
+    print("1. Inclusão")
+    print("2. Exclusão")
+    print("3. Caminhamento Pré-ordem")
+    print("4. Mostrar Árvore")
+    print("5. Fim")
 
+    opcao = input("Digite uma das opções acima: ")
 
-# Exibindo a árvore para verificar os valores incluídos
-print("Árvore Binária de Busca:")
+    if opcao == "1":
+        valor = input("Insira o valor que deseja incluir: ")
+        raiz, confere = arvore.Inclusao(int(valor))
+        if confere == False:
+            print("Seu valor foi incluído na árvore com sucesso!")
+    elif opcao == "2":
+        valor = input("Insira o valor que deseja excluir: ")
+        confere = arvore.Exclusao(int(valor))
+        if confere:
+            print("Seu valor foi excluído na árvore com sucesso!")
+    elif opcao == "3":
+        print("Abaixo está o seu caminhamento pré-ordem: ")
+        arvore.Pre_Ordem()
+    elif opcao == "4":
+        print("Abaixo está a estrutura da sua árvore: ")
+        print(" ")
+        arvore.imprimir_arvore(arvore.raiz)
+        print(" ")
+        print("Leia a árvore da esquerda para direita, conforme a seta -->.")
+        print("Para cada nó, entre parênteses, está a corrêspondecia se o respectivo nó é filho direito (D) ou esquerdo (E).Ex.: 50 (E) é filho esquerdo de seu pai ")
+        print(" Para cima, estão as sub-árvores esquerda. Para baixo, estão as sub-árvores direita. ")
+    elif opcao == "5":
+        print(" O seu programa foi encerrado! Que pena, gostaria de você aqui para continuarmos aprendendo. Até a próxima!")
 
-arvore.imprimir_arvore(arvore.raiz)
